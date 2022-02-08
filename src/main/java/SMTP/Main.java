@@ -16,13 +16,8 @@ import javax.swing.JOptionPane;
 public class Main extends javax.swing.JFrame {
     
     private boolean loggedIn = false;
-
-    private boolean loggedIn = false;
-    /**
-     * Creates new form Main
-     */
+    
     public Main() {
-        initApp();
         initComponents();
     }
 
@@ -50,6 +45,11 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(650, 300));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -142,16 +142,15 @@ public class Main extends javax.swing.JFrame {
         Pattern emailRegEx = Pattern.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
                 if (emailRegEx.matcher(correoReceptor).matches()) {
                     
-                    LogIn ld = new LogIn(this, true);
-                    ld.setReceptor(correoReceptor);
-                    ld.setAsunto(asunto);
-                    ld.setMissatge(missatge);
-                    ld.setVisible(true);
                     
                 } else if (!emailRegEx.matcher(correoReceptor).matches()) {
                     JOptionPane.showMessageDialog(null, "El text introduit no es un correu electronic");
                 }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        askLoginLoop();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -202,7 +201,19 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 
-    private void initApp() {
-        
+    private void askLoginLoop() {
+        while (!loggedIn) {
+            LogIn ld = new LogIn(this, true);
+            ld.setVisible(true);
+        }
+    }
+
+    //getters and setters
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 }
