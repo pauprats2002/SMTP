@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
  * @author Alumne
  */
 public class Main extends javax.swing.JFrame {
+    
+    private boolean loggedIn = false;
 
     private boolean loggedIn = false;
     /**
