@@ -5,6 +5,7 @@
  */
 package SMTP;
 
+import SMTP.Dialogs.LogIn;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -39,9 +40,9 @@ public class Main extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAreaMissatge = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtAsunto = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -89,14 +90,14 @@ public class Main extends javax.swing.JFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 420, 120, 30));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 290, 20));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Roboto Light", 2, 12)); // NOI18N
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setWrapStyleWord(true);
-        jTextArea1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jTextArea1.setOpaque(false);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtAreaMissatge.setColumns(20);
+        txtAreaMissatge.setFont(new java.awt.Font("Roboto Light", 2, 12)); // NOI18N
+        txtAreaMissatge.setLineWrap(true);
+        txtAreaMissatge.setRows(5);
+        txtAreaMissatge.setWrapStyleWord(true);
+        txtAreaMissatge.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txtAreaMissatge.setOpaque(false);
+        jScrollPane1.setViewportView(txtAreaMissatge);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 290, 170));
 
@@ -105,9 +106,9 @@ public class Main extends javax.swing.JFrame {
         jLabel3.setText("Asunto:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
 
-        jTextField2.setFont(new java.awt.Font("Roboto Light", 2, 12)); // NOI18N
-        jTextField2.setBorder(null);
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 290, 30));
+        txtAsunto.setFont(new java.awt.Font("Roboto Light", 2, 12)); // NOI18N
+        txtAsunto.setBorder(null);
+        jPanel1.add(txtAsunto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 290, 30));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 290, 10));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -134,10 +135,16 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String correoReceptor = txtEmail.getText();
+        String asunto = txtAsunto.getText();
+        String missatge = txtAreaMissatge.getText();
         Pattern emailRegEx = Pattern.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
                 if (emailRegEx.matcher(correoReceptor).matches()) {
                     
-                    
+                    LogIn ld = new LogIn(this, true);
+                    ld.setReceptor(correoReceptor);
+                    ld.setAsunto(asunto);
+                    ld.setMissatge(missatge);
+                    ld.setVisible(true);
                     
                 } else if (!emailRegEx.matcher(correoReceptor).matches()) {
                     JOptionPane.showMessageDialog(null, "El text introduit no es un correu electronic");
@@ -188,19 +195,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextArea txtAreaMissatge;
+    private javax.swing.JTextField txtAsunto;
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 
     private void initApp() {
         
-    }
-    
-    private void askLoginLoop() {
-        while (!loggedIn) {
-            Login ld = new Login(this, true);
-            ld.setVisible(true);
-        }
     }
 }
