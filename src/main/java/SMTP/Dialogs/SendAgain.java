@@ -36,27 +36,28 @@ public class SendAgain extends javax.swing.JDialog {
         btnNo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(650, 300));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 3, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Vols enviar un altre missatge?");
+        jLabel1.setText("Quieres mandar otro mensaje?");
         jLabel1.setToolTipText("");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 220, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 210, 30));
 
         btnYes.setBackground(new java.awt.Color(0, 134, 190));
         btnYes.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
         btnYes.setForeground(new java.awt.Color(255, 255, 255));
-        btnYes.setText("YES");
+        btnYes.setText("SI");
         btnYes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnYes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnYesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, -1, -1));
+        jPanel1.add(btnYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, 80, 30));
 
         btnNo.setBackground(new java.awt.Color(0, 134, 190));
         btnNo.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
@@ -68,17 +69,17 @@ public class SendAgain extends javax.swing.JDialog {
                 btnNoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, -1, -1));
+        jPanel1.add(btnNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 80, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
         );
 
         pack();
