@@ -5,10 +5,9 @@
  */
 package SMTP;
 
-import SMTP.Dialogs.LogInDialog;
+import SMTP.Dialogs.LogIn;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -18,7 +17,12 @@ public class Main extends javax.swing.JFrame {
     
     private boolean loggedIn = false;
 
+    private boolean loggedIn = false;
+    /**
+     * Creates new form Main
+     */
     public Main() {
+        initApp();
         initComponents();
     }
 
@@ -44,11 +48,8 @@ public class Main extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
+        setLocation(new java.awt.Point(650, 300));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -116,11 +117,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
         );
 
         pack();
@@ -131,7 +132,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEmailActionPerformed
 
     private void txtEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtEmailMouseClicked
-
+        
     }//GEN-LAST:event_txtEmailMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -139,23 +140,19 @@ public class Main extends javax.swing.JFrame {
         String asunto = txtAsunto.getText();
         String missatge = txtAreaMissatge.getText();
         Pattern emailRegEx = Pattern.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
-        if (emailRegEx.matcher(correoReceptor).matches()) {
-
-            LogInDialog ld = new LogInDialog(this, true);
-            ld.setReceptor(correoReceptor);
-            ld.setAsunto(asunto);
-            ld.setMissatge(missatge);
-            ld.setVisible(true);
-
-        } else if (!emailRegEx.matcher(correoReceptor).matches()) {
-            JOptionPane.showMessageDialog(null, "El text introduit no es un correu electronic");
-        }
+                if (emailRegEx.matcher(correoReceptor).matches()) {
+                    
+                    LogIn ld = new LogIn(this, true);
+                    ld.setReceptor(correoReceptor);
+                    ld.setAsunto(asunto);
+                    ld.setMissatge(missatge);
+                    ld.setVisible(true);
+                    
+                } else if (!emailRegEx.matcher(correoReceptor).matches()) {
+                    JOptionPane.showMessageDialog(null, "El text introduit no es un correu electronic");
+                }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-           askLoginLoop();
-    }//GEN-LAST:event_formWindowOpened
-  
     /**
      * @param args the command line arguments
      */
@@ -204,20 +201,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField txtAsunto;
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
-  
-    private void askLoginLoop() {
-        while (!loggedIn) {
-            LogInDialog ld = new LogInDialog(this, true);
-            ld.setVisible(true);
-        }
-    }
-    
-    private void logout() {
-        loggedIn = false;
-        askLoginLoop();
-    }
-    
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+
+    private void initApp() {
+        
     }
 }
