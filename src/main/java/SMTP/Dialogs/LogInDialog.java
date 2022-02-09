@@ -35,6 +35,7 @@ public class LogInDialog extends javax.swing.JDialog {
         close();
         setLocationRelativeTo(null);
         main = (Main) this.getParent();
+        initComponents();
     }
 
     /**

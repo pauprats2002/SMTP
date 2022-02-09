@@ -5,9 +5,19 @@
  */
 package SMTP;
 
-import SMTP.Dialogs.LogIn;
+
 import SMTP.Dialogs.LogInDialog;
+import SMTP.Dialogs.SendAgain;
+import java.awt.Frame;
+import java.util.Properties;
 import java.util.regex.Pattern;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,7 +27,7 @@ import javax.swing.JOptionPane;
 public class Main extends javax.swing.JFrame {
     
     private boolean loggedIn = false;
-    
+  
     public Main() {
         initComponents();
     }
@@ -76,7 +86,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Missatge:");
+        jLabel2.setText("Mensaje:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 60, 30));
 
         jButton1.setBackground(new java.awt.Color(0, 134, 190));
@@ -137,11 +147,47 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEmailMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       
+        String correoRemitente = "interficies99@gmail.com";
+        String passwordRemitente = "1234joan";
         String correoReceptor = txtEmail.getText();
         String asunto = txtAsunto.getText();
         String missatge = txtAreaMissatge.getText();
         Pattern emailRegEx = Pattern.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
                 if (emailRegEx.matcher(correoReceptor).matches()) {
+                    Properties props = System.getProperties();
+                    props.put("mail.smtp.ssl.trust", "smtp.gmail.com");  //El servidor SMTP de Google
+                    props.put("mail.smtp.user", correoRemitente);     // El correo del remitente
+                    props.put("mail.smtp.clave", passwordRemitente);  //La clave de la cuenta
+                    props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+                    props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+                    props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+                    System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2"); //Solucionar el error de protocol
+
+                    Session session = Session.getDefaultInstance(props);
+                    MimeMessage message = new MimeMessage(session);
+
+                    try {
+
+                        message.setFrom(new InternetAddress(correoRemitente));
+                        message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+                        message.setSubject(asunto);
+                        message.setText(missatge);
+
+                        Transport transport = session.getTransport("smtp");
+                        transport.connect("smtp.gmail.com", correoRemitente, passwordRemitente);
+                        transport.sendMessage(message, message.getAllRecipients());
+                        transport.close();
+
+                        JOptionPane.showMessageDialog(null, "Correu Electronic Enviat");
+                        setVisible(false);
+                        SendAgain sa = new SendAgain((Frame) this.getParent(), true);
+                        sa.setVisible(true);
+                    } catch (AddressException ex) {
+                        ex.printStackTrace();
+                    } catch (MessagingException ex) {
+                        ex.printStackTrace();
+                    }
                     
                     
                 } else if (!emailRegEx.matcher(correoReceptor).matches()) {
