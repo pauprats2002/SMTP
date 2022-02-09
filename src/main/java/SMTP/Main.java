@@ -6,6 +6,7 @@
 package SMTP;
 
 import SMTP.Dialogs.LogIn;
+import SMTP.Dialogs.LogInDialog;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -203,7 +204,7 @@ public class Main extends javax.swing.JFrame {
 
     private void askLoginLoop() {
         while (!loggedIn) {
-            LogIn ld = new LogIn(this, true);
+            LogInDialog ld = new LogInDialog(this, true);
             ld.setVisible(true);
         }
     }
