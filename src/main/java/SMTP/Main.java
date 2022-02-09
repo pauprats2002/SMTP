@@ -5,6 +5,7 @@
  */
 package SMTP;
 
+
 import SMTP.Dialogs.LogInDialog;
 import SMTP.Dialogs.SendAgain;
 import java.awt.Frame;
@@ -26,12 +27,8 @@ import javax.swing.JOptionPane;
 public class Main extends javax.swing.JFrame {
     
     private boolean loggedIn = false;
-
-    /**
-     * Creates new form Main
-     */
+  
     public Main() {
-        initApp();
         initComponents();
     }
 
@@ -59,6 +56,11 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(650, 300));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -193,6 +195,10 @@ public class Main extends javax.swing.JFrame {
                 }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        askLoginLoop();
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -242,7 +248,19 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 
-    private void initApp() {
-        
+    private void askLoginLoop() {
+        while (!loggedIn) {
+            LogInDialog ld = new LogInDialog(this, true);
+            ld.setVisible(true);
+        }
+    }
+
+    //getters and setters
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 }
