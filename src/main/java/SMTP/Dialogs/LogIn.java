@@ -52,7 +52,7 @@ public class LogIn extends javax.swing.JDialog {
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         pswPassword1 = new javax.swing.JPasswordField();
-        jLabel4 = new javax.swing.JLabel();
+        lblPasswordImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -102,13 +102,13 @@ public class LogIn extends javax.swing.JDialog {
         pswPassword1.setBorder(null);
         jPanel2.add(pswPassword1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 290, 20));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/144-lock.png"))); // NOI18N
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblPasswordImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/144-lock.png"))); // NOI18N
+        lblPasswordImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                lblPasswordImageMouseClicked(evt);
             }
         });
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, -1, 20));
+        jPanel2.add(lblPasswordImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,14 +128,16 @@ public class LogIn extends javax.swing.JDialog {
         logIn();
     }//GEN-LAST:event_btnLogInActionPerformed
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void lblPasswordImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPasswordImageMouseClicked
         showPassword = !showPassword;
         if(showPassword) {
             pswPassword1.setEchoChar((char) 0);
+            lblPasswordImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/145-unlocked.png")));
         } else {
             pswPassword1.setEchoChar((char) '*');
+            lblPasswordImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/144-lock.png")));
         }
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_lblPasswordImageMouseClicked
 
     /**
      * @param args the command line arguments
@@ -184,11 +186,11 @@ public class LogIn extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JLabel lblPasswordImage;
     private javax.swing.JPasswordField pswPassword1;
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
