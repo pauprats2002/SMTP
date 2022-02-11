@@ -6,20 +6,16 @@
 package SMTP;
 
 import SMTP.Dialogs.LogIn;
-import SMTP.Dialogs.LogInDialog;
 import SMTP.Dialogs.SendAgain;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.imageio.ImageIO;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -41,7 +37,7 @@ import javax.swing.JOptionPane;
 public class Main extends javax.swing.JFrame {
 
     private boolean loggedIn = false;
-    private LogInDialog logIn;
+    private LogIn logIn;
     JFileChooser fileChooser;
     String archivo;
     String nombre;
@@ -200,7 +196,7 @@ public class Main extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         String correoRemitente = logIn.getTxtEmail().getText();
-        String passwordRemitente = logIn.getPswPassword().getText();
+        String passwordRemitente = logIn.getPswPassword1().getText();
         //String correoRemitente = "interficies99@gmail.com";
         //String passwordRemitente = "1234joan";
         String correoReceptor = txtEmail.getText();
@@ -368,7 +364,7 @@ public class Main extends javax.swing.JFrame {
 
     private void askLoginLoop() {
         while (!loggedIn) {
-            LogInDialog ld = new LogInDialog(this, true);
+            LogIn ld = new LogIn(this, true);
             ld.setVisible(true);
         }
     }
