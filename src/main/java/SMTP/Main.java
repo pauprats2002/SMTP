@@ -40,10 +40,28 @@ import javax.swing.JOptionPane;
 public class Main extends javax.swing.JFrame {
 
     private boolean loggedIn = false;
-    private LogIn logIn;
+    private LogIn logIn = new LogIn(this, true);
     JFileChooser fileChooser;
+    String correoRemitente;
+    String passwordRemitente;
     String archivo;
     String nombre;
+    
+    public String getCorreoRemitente() {
+        return correoRemitente;
+    }
+
+    public void setCorreoRemitente(String correoRemitente) {
+        this.correoRemitente = correoRemitente;
+    }
+
+    public String getPasswordRemitente() {
+        return passwordRemitente;
+    }
+
+    public void setPasswordRemitente(String passwordRemitente) {
+        this.passwordRemitente = passwordRemitente;
+    }
 
     public Main() {
         initComponents();
@@ -197,17 +215,16 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        String correoRemitente = logIn.getTxtEmail().getText();
-        String passwordRemitente = logIn.getPswPassword1().getText();
-        //String correoRemitente = "interficies99@gmail.com";
-        //String passwordRemitente = "1234joan";
+        correoRemitente = "interficies99@gmail.com";
+        passwordRemitente = "1234joan";
+        //correoRemitente = logIn.getTxtEmail().getText();
+        //passwordRemitente = logIn.(new String getPswPassword1.getPassword());
         String correoReceptor = txtEmail.getText();
         String asunto = txtAsunto.getText();
         String missatge = txtAreaMissatge.getText();
         Pattern emailRegEx = Pattern.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
         if (emailRegEx.matcher(correoReceptor).matches()) {
-            if (archivo == null) {
+            if (archivo == null || archivo == "") {
                 Properties props = System.getProperties();
                 props.put("mail.smtp.ssl.trust", "smtp.gmail.com");  //El servidor SMTP de Google
                 props.put("mail.smtp.user", correoRemitente);     // El correo del remitente
@@ -231,12 +248,17 @@ public class Main extends javax.swing.JFrame {
                     transport.close();
 
                     JOptionPane.showMessageDialog(null, "Correu Electronic Enviat");
-                    missatge = "";
-                    asunto = "";
-                    correoReceptor = "";
+                    
+                    int response = JOptionPane.showConfirmDialog(this, "Vols tornar a mandar un missatge?", "Confirm action", JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.YES_OPTION) {
+                        txtEmail.setText("");
+                        txtAsunto.setText("");
+                        txtAreaMissatge.setText("");
+                    } else {
                     setVisible(false);
-                    SendAgain sa = new SendAgain((Frame) this.getParent(), true);
-                    sa.setVisible(true);
+                    Main ma = new Main();
+                    ma.setVisible(true);
+                    }
                 } catch (AddressException ex) {
                     ex.printStackTrace();
                 } catch (MessagingException ex) {
@@ -275,13 +297,17 @@ public class Main extends javax.swing.JFrame {
                     t.sendMessage(message, message.getAllRecipients());
                     t.close();
                     JOptionPane.showMessageDialog(null, "Correu Electronic Enviat");
-                    missatge = "";
-                    asunto = "";
-                    correoReceptor = "";
+                    int response = JOptionPane.showConfirmDialog(this, "Vols tornar a mandar un missatge?", "Confirm action", JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.YES_OPTION) {
+                        txtEmail.setText("");
+                        txtAsunto.setText("");
+                        txtAreaMissatge.setText("");
+                        archivo = "";
+                    } else {
                     setVisible(false);
-                    SendAgain sa = new SendAgain((Frame) this.getParent(), true);
-                    sa.setVisible(true);
-                    archivo = "";
+                    Main ma = new Main();
+                    ma.setVisible(true);
+                    }
                 } catch (MessagingException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }

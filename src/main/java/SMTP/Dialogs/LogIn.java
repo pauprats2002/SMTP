@@ -7,6 +7,7 @@ package SMTP.Dialogs;
 
 import SMTP.Main;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.regex.Pattern;
@@ -126,6 +127,9 @@ public class LogIn extends javax.swing.JDialog {
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
         logIn();
+        Main cP = new Main();
+        cP.setPasswordRemitente(new String(pswPassword1.getPassword()));
+        cP.setCorreoRemitente(txtEmail.getText());
     }//GEN-LAST:event_btnLogInActionPerformed
 
     private void lblPasswordImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPasswordImageMouseClicked
