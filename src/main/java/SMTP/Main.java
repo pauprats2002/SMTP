@@ -301,18 +301,23 @@ public class Main extends javax.swing.JFrame {
         fileChooser = new JFileChooser();
         int returnOption = fileChooser.showOpenDialog(this);
         if (returnOption == JFileChooser.APPROVE_OPTION) // try {
-        //BufferedImage bufferedImage = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
-        //ImageIcon icon = resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
-        //lblImage.setIcon(icon);
         {
             archivo = fileChooser.getSelectedFile().getPath();
         }
         nombre = fileChooser.getSelectedFile().getName();
         String miss = txtAreaMissatge.getText();
         txtAreaMissatge.setText(miss + "\n" + nombre);
-        //} catch (IOException ioe) {
-        //   ioe.printStackTrace();
-        // }
+        if (archivo.contains(".jpg") || archivo.contains(".png") || archivo.contains(".jpeg")) {
+            BufferedImage bufferedImage;
+            try {
+                bufferedImage = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
+                ImageIcon icon = resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
+                lblImage.setIcon(icon);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
