@@ -93,7 +93,7 @@ public class SendAgain extends javax.swing.JDialog {
 
     private void btnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoActionPerformed
         setVisible(false);
-        LogInDialog log = new LogInDialog((Frame) this.getParent(), true);
+        LogIn log = new LogIn((Frame) this.getParent(), true);
         log.setVisible(true);
     }//GEN-LAST:event_btnNoActionPerformed
 
