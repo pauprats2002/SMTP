@@ -5,6 +5,7 @@
  */
 package SMTP;
 
+import SMTP.Dialogs.LogIn;
 import SMTP.Dialogs.LogInDialog;
 import SMTP.Dialogs.SendAgain;
 import java.awt.Frame;
@@ -40,7 +41,7 @@ import javax.swing.JOptionPane;
 public class Main extends javax.swing.JFrame {
 
     private boolean loggedIn = false;
-    private LogInDialog logIn = new LogInDialog((Frame) this.getParent(), true);
+    private LogInDialog logIn;
     JFileChooser fileChooser;
     String archivo;
     String nombre;
@@ -75,6 +76,11 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(650, 300));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -141,14 +147,14 @@ public class Main extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(0, 134, 190));
         jButton2.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("INSERTAR IMATGE");
+        jButton2.setText("INSERTAR ARCHIVO");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 420, 150, 30));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 420, 160, 30));
         jPanel1.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, 230, 340));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -195,51 +201,91 @@ public class Main extends javax.swing.JFrame {
 
         String correoRemitente = logIn.getTxtEmail().getText();
         String passwordRemitente = logIn.getPswPassword().getText();
+        //String correoRemitente = "interficies99@gmail.com";
+        //String passwordRemitente = "1234joan";
         String correoReceptor = txtEmail.getText();
         String asunto = txtAsunto.getText();
         String missatge = txtAreaMissatge.getText();
         Pattern emailRegEx = Pattern.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
         if (emailRegEx.matcher(correoReceptor).matches()) {
-            Properties props = System.getProperties();
-            props.put("mail.smtp.ssl.trust", "smtp.gmail.com");  //El servidor SMTP de Google
-            props.put("mail.smtp.user", correoRemitente);     // El correo del remitente
-            props.put("mail.smtp.clave", passwordRemitente);  //La clave de la cuenta
-            props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
-            props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
-            props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
-            System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2"); //Solucionar el error de protocol
+            if (archivo == null) {
+                Properties props = System.getProperties();
+                props.put("mail.smtp.ssl.trust", "smtp.gmail.com");  //El servidor SMTP de Google
+                props.put("mail.smtp.user", correoRemitente);     // El correo del remitente
+                props.put("mail.smtp.clave", passwordRemitente);  //La clave de la cuenta
+                props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+                props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+                props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+                System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2"); //Solucionar el error de protocol
 
-            Session session = Session.getDefaultInstance(props);
-            MimeMessage message = new MimeMessage(session);
-            try {
-                BodyPart texto = new MimeBodyPart();
-                BodyPart adjunto = new MimeBodyPart();
-                adjunto.setDataHandler(new DataHandler(new FileDataSource(archivo)));
-                adjunto.setFileName(nombre);
-                MimeMultipart multiParte = new MimeMultipart();
-                multiParte.addBodyPart(texto);
-                multiParte.addBodyPart(adjunto);
+                Session session = Session.getDefaultInstance(props);
+                MimeMessage message = new MimeMessage(session);
+                try {
+                    message.setFrom(new InternetAddress(correoRemitente));
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+                    message.setSubject(asunto);
+                    message.setText(missatge);
 
-                message.setFrom(new InternetAddress(correoRemitente));
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
-                message.setSubject(asunto);
-                message.setText(missatge);
-                message.setText(lblImage.getText());
-                message.setContent(multiParte);
+                    Transport transport = session.getTransport("smtp");
+                    transport.connect("smtp.gmail.com", correoRemitente, passwordRemitente);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
 
-                Transport transport = session.getTransport("smtp");
-                transport.connect("smtp.gmail.com", correoRemitente, passwordRemitente);
-                transport.sendMessage(message, message.getAllRecipients());
-                transport.close();
+                    JOptionPane.showMessageDialog(null, "Correu Electronic Enviat");
+                    missatge = "";
+                    asunto = "";
+                    correoReceptor = "";
+                    setVisible(false);
+                    SendAgain sa = new SendAgain((Frame) this.getParent(), true);
+                    sa.setVisible(true);
+                } catch (AddressException ex) {
+                    ex.printStackTrace();
+                } catch (MessagingException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                try {
+                    Properties props = System.getProperties();
+                    props.put("mail.smtp.ssl.trust", "smtp.gmail.com");  //El servidor SMTP de Google
+                    props.put("mail.smtp.user", correoRemitente);     // El correo del remitente
+                    props.put("mail.smtp.clave", passwordRemitente);  //La clave de la cuenta
+                    props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+                    props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+                    props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+                    System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2"); //Solucionar el error de protocol
 
-                JOptionPane.showMessageDialog(null, "Correu Electronic Enviat");
-                setVisible(false);
-                SendAgain sa = new SendAgain((Frame) this.getParent(), true);
-                sa.setVisible(true);
-            } catch (AddressException ex) {
-                ex.printStackTrace();
-            } catch (MessagingException ex) {
-                ex.printStackTrace();
+                    Session session = Session.getDefaultInstance(props);
+                    session.setDebug(false);
+                    BodyPart texto = new MimeBodyPart();
+                    texto.setText(missatge);
+                    BodyPart adjunto = new MimeBodyPart();
+                    adjunto.setDataHandler(new DataHandler(new FileDataSource(archivo)));
+                    adjunto.setFileName(nombre);
+                    MimeMultipart multiParte = new MimeMultipart();
+                    multiParte.addBodyPart(texto);
+                    multiParte.addBodyPart(adjunto);
+
+                    MimeMessage message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(correoRemitente));
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+                    message.setSubject(asunto);
+                    message.setContent(multiParte);
+                    Transport t = null;
+                    t = session.getTransport("smtp");
+                    t.connect("smtp.gmail.com", correoRemitente, passwordRemitente);
+                    t.sendMessage(message, message.getAllRecipients());
+                    t.close();
+                    JOptionPane.showMessageDialog(null, "Correu Electronic Enviat");
+                    missatge = "";
+                    asunto = "";
+                    correoReceptor = "";
+                    setVisible(false);
+                    SendAgain sa = new SendAgain((Frame) this.getParent(), true);
+                    sa.setVisible(true);
+                    archivo = "";
+                } catch (MessagingException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         } else if (!emailRegEx.matcher(correoReceptor).matches()) {
@@ -254,16 +300,19 @@ public class Main extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         fileChooser = new JFileChooser();
         int returnOption = fileChooser.showOpenDialog(this);
-        if (returnOption == JFileChooser.APPROVE_OPTION)
-            try {
-            BufferedImage bufferedImage = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
-            ImageIcon icon = resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
-            lblImage.setIcon(icon);
+        if (returnOption == JFileChooser.APPROVE_OPTION) // try {
+        //BufferedImage bufferedImage = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
+        //ImageIcon icon = resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
+        //lblImage.setIcon(icon);
+        {
             archivo = fileChooser.getSelectedFile().getPath();
-            nombre = fileChooser.getSelectedFile().getName();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
         }
+        nombre = fileChooser.getSelectedFile().getName();
+        String miss = txtAreaMissatge.getText();
+        txtAreaMissatge.setText(miss + "\n" + nombre);
+        //} catch (IOException ioe) {
+        //   ioe.printStackTrace();
+        // }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
