@@ -215,6 +215,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // No ens agafa el correu i password de la clase LogIn per aixo hem fet un default
         correoRemitente = "interficies99@gmail.com";
         passwordRemitente = "1234joan";
         //correoRemitente = logIn.getTxtEmail().getText();
@@ -302,6 +303,7 @@ public class Main extends javax.swing.JFrame {
                         txtEmail.setText("");
                         txtAsunto.setText("");
                         txtAreaMissatge.setText("");
+                        lblImage.setIcon(null);
                         archivo = "";
                     } else {
                     setVisible(false);
